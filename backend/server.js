@@ -1,5 +1,4 @@
 const express = require ('express');
-var Twit = require('twit');
 
 var T = new Twit({
     consumer_key:         'psn8fBs3uxAdDwTT2Bk1SgFgm',
@@ -16,9 +15,6 @@ app.get('/', function (req, res) {
     res.send('Hello World')
 })
 
-T.get('search/tweets', { q: '#football', count: 2 }, function(err, data, response) {
-    console.log(data.statuses[0].entities)
-})
 
 
 app.listen(3000,()=>{
