@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import SearchBox from './Components/SearchBox';
-import FeedCard from './Components/FeedCard';
+import FeedCardList from './Components/FeedCardList';
 import './App.css';
 
 class App extends Component{
   constructor(){
     super();
     this.state = {
-      searchField : ''
+      searchField : '',
+      hashtag : '',
+      tweets : []
     }
   }
 
@@ -16,14 +18,25 @@ class App extends Component{
   }
 
   onButtonSubmit = () => {
-    console.log(this.state.searchField)
+    this.setState({hashtag : this.state.searchField})
+    fetch('http://localhost:4000/gettweets', {
+      'method' : 'post',
+      'headers' : {'Content-Type' : 'application/json'},
+      'body' : JSON.stringify({
+        hashtag : this.state.searchField,
+      })
+    })
+    .then (response => response.json())
+    .then (data => {
+      this.setState({tweets : data})
+    }).catch(err => console.log(err))
   }
 
   render(){
     return (
       <div>
         <SearchBox onInputChange = {this.onInputChange} onButtonSubmit = {this.onButtonSubmit} />
-        <FeedCard />
+        <FeedCardList tweets={this.state.tweets} />
       </div>
     );
   }
